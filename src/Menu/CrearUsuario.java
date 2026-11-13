@@ -28,9 +28,10 @@ public class CrearUsuario extends JFrame {
     private JTextField ingresar_email;
     private JComboBox ingresar_tipo_de_id;
     private JButton subir_foto;
+    private JButton boton_d_registrar;
 
 
-    //Método constructor
+    //Metodo constructor
     public CrearUsuario() {
 
         //Unos ajustes de la ventana
@@ -53,6 +54,16 @@ public class CrearUsuario extends JFrame {
                 File archivoSeleccionado = fileChooser.getSelectedFile();
             }
         });
+
+        //Este es el menusito ese para seleccionar los tipos de documentos
+        ingresar_tipo_de_id.addItem(" ");
+        ingresar_tipo_de_id.addItem("Cédula de ciudadanía");
+        ingresar_tipo_de_id.addItem("Tarjeta de identidad");
+        ingresar_tipo_de_id.addItem("Permiso especial de permanencia");
+        ingresar_tipo_de_id.addItem("Permiso por protección temporal");
+        ingresar_tipo_de_id.addItem("Cédula de extranjería");
+        ingresar_tipo_de_id.addItem("Pasaporte");
+        ingresar_tipo_de_id.addItem("No tiene");
     }
 
     public static void main(String[] args) {
