@@ -132,6 +132,7 @@ public class CrearUsuario extends JFrame {
 
         Runnable validar = () -> {
             // Verificamos que ninguno de los campos esté vacío (eliminando espacios en blanco)
+            boolean comboValido = ingresar_tipo_de_id.getSelectedIndex() > 0;
             boolean campo1Lleno = !ingresar_num_de_id.getText().trim().isEmpty();
             boolean campo2Lleno = !ingresar_primer_nomb.getText().trim().isEmpty();
             boolean campo3Lleno = !ingresar_primer_apell.getText().trim().isEmpty();
@@ -140,7 +141,6 @@ public class CrearUsuario extends JFrame {
             boolean campo6Lleno = !ingresar_telefono.getText().trim().isEmpty();
             boolean campo7Lleno = !ingresar_email.getText().trim().isEmpty();
             boolean campo8Lleno = (fotoSeleccionada != null);
-            boolean comboValido = ingresar_tipo_de_id.getSelectedIndex() > 0;
 
             // El botón solo se activa si TODOS los campos tienen contenido
             boton_d_registrar.setEnabled(campo1Lleno && campo2Lleno && campo3Lleno && campo4Lleno && campo5Lleno && campo6Lleno && campo7Lleno && campo8Lleno && comboValido);
@@ -155,21 +155,24 @@ public class CrearUsuario extends JFrame {
             public void changedUpdate(DocumentEvent e) { validar.run(); }
         };
 
+        //Aplicando el documentlistener a los textfields
+        ingresar_tipo_de_id.addActionListener(e -> {
+            validar.run();
+        });
+        ingresar_num_de_id.getDocument().addDocumentListener(validadorCampos);
         ingresar_primer_nomb.getDocument().addDocumentListener(validadorCampos);
         ingresar_primer_apell.getDocument().addDocumentListener(validadorCampos);
         ingresar_segund_apell.getDocument().addDocumentListener(validadorCampos);
         ingresar_contraseña.getDocument().addDocumentListener(validadorCampos);
         ingresar_telefono.getDocument().addDocumentListener(validadorCampos);
-        ingresar_num_de_id.getDocument().addDocumentListener(validadorCampos);
         ingresar_email.getDocument().addDocumentListener(validadorCampos);
-        ingresar_primer_nomb.getDocument().addDocumentListener(validadorCampos);
 
         //EL botonsito para subir la foto
         subir_foto.addActionListener(e -> {
 
             //Esto es eel filechooser
             JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter filtroTexto = new FileNameExtensionFilter("Archivos de imagen (*.PNG, JPG)", "JPG", "PNG");
+            FileNameExtensionFilter filtroTexto = new FileNameExtensionFilter("Archivos de imagen (*.png, jpg)", "jpg", "png");
             fileChooser.setFileFilter(filtroTexto);
             fileChooser.setAcceptAllFileFilterUsed(false);
 
@@ -177,16 +180,13 @@ public class CrearUsuario extends JFrame {
             int resultado = fileChooser.showOpenDialog(this);
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
-                File fotoSeleccionada = fileChooser.getSelectedFile();
+
+                fotoSeleccionada = fileChooser.getSelectedFile();
+
+                //Acá validamos que se haya adjuntdo la foto
                 validar.run();
             }
         });
-
-        ingresar_tipo_de_id.addActionListener(e -> {
-            validar.run();
-        });
-
-
     }
 
     public static void main(String[] args) {
