@@ -5,6 +5,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class CrearUsuario extends JFrame {
 
@@ -23,72 +26,6 @@ public class CrearUsuario extends JFrame {
     private JLabel foto;
     private JTextField ingresar_num_de_id;
     private JTextField ingresar_primer_nomb;
-
-    //Getters y setters
-    public JTextField getIngresar_num_de_id() {
-        return ingresar_num_de_id;
-    }
-
-    public void setIngresar_num_de_id(JTextField ingresar_num_de_id) {
-        this.ingresar_num_de_id = ingresar_num_de_id;
-    }
-
-    public JTextField getIngresar_primer_nomb() {
-        return ingresar_primer_nomb;
-    }
-
-    public void setIngresar_primer_nomb(JTextField ingresar_primer_nomb) {
-        this.ingresar_primer_nomb = ingresar_primer_nomb;
-    }
-
-    public JTextField getIngresar_segund_nomb() {
-        return ingresar_segund_nomb;
-    }
-
-    public void setIngresar_segund_nomb(JTextField ingresar_segund_nomb) {
-        this.ingresar_segund_nomb = ingresar_segund_nomb;
-    }
-
-    public JTextField getIngresar_primer_apell() {
-        return ingresar_primer_apell;
-    }
-
-    public void setIngresar_primer_apell(JTextField ingresar_primer_apell) {
-        this.ingresar_primer_apell = ingresar_primer_apell;
-    }
-
-    public JTextField getIngresar_segund_apell() {
-        return ingresar_segund_apell;
-    }
-
-    public void setIngresar_segund_apell(JTextField ingresar_segund_apell) {
-        this.ingresar_segund_apell = ingresar_segund_apell;
-    }
-
-    public JPasswordField getIngresar_contraseña() {
-        return ingresar_contraseña;
-    }
-
-    public void setIngresar_contraseña(JPasswordField ingresar_contraseña) {
-        this.ingresar_contraseña = ingresar_contraseña;
-    }
-
-    public JTextField getIngresar_telefono() {
-        return ingresar_telefono;
-    }
-
-    public void setIngresar_telefono(JTextField ingresar_telefono) {
-        this.ingresar_telefono = ingresar_telefono;
-    }
-
-    public JTextField getIngresar_email() {
-        return ingresar_email;
-    }
-
-    public void setIngresar_email(JTextField ingresar_email) {
-        this.ingresar_email = ingresar_email;
-    }
-
     private JTextField ingresar_segund_nomb;
     private JTextField ingresar_primer_apell;
     private JTextField ingresar_segund_apell;
@@ -99,6 +36,7 @@ public class CrearUsuario extends JFrame {
     private JButton subir_foto;
     private JButton boton_d_registrar;
     private JButton limpiarButton;
+    private JLabel icon;
 
     //Variable para validar si se subió una foto
     private File fotoSeleccionada = null;
@@ -112,7 +50,6 @@ public class CrearUsuario extends JFrame {
         setContentPane(panel_r);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
-
 
         //Este es el menusito ese para seleccionar los tipos de documentos
         ingresar_tipo_de_id.addItem(" ");
@@ -180,11 +117,56 @@ public class CrearUsuario extends JFrame {
             int resultado = fileChooser.showOpenDialog(this);
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
-
                 fotoSeleccionada = fileChooser.getSelectedFile();
-
                 //Acá validamos que se haya adjuntdo la foto
                 validar.run();
+            }
+        });
+
+        //Instanciamos la clase
+        Usuario gestor = new Usuario();
+
+        //Esto es para que al presionar el boton de registrar se guarden los datos en la array
+        boton_d_registrar.addActionListener( e -> {
+            String tipodeidcap = String.valueOf(ingresar_tipo_de_id.getSelectedItem());
+            String ndidcap = ingresar_primer_nomb.getText().trim();
+            String pnombrecap = ingresar_primer_nomb.getText().trim();
+            String snombrecap = ingresar_segund_nomb.getText().trim();
+            String papellidocap = ingresar_primer_apell.getText().trim();
+            String sapellidocap = ingresar_segund_apell.getText().trim();
+            String contraseñacap = ingresar_contraseña.getText().trim();
+            String correocap = ingresar_email.getText().trim();
+            String telefonocap = ingresar_telefono.getText().trim();
+
+            //Acá atrapamos la foto y la ubicamos
+            File fotoCapturada = fotoSeleccionada;
+
+            try {
+                //Esto es para obtener la foto
+                File carpetaDestino = new File("Fotos");
+
+                if (!carpetaDestino.exists()) {
+                    carpetaDestino.mkdir();
+                }
+
+                if (!carpetaDestino.isDirectory()) {
+                    throw new IOException("La ruta de destino no es un directorio válido.");
+                }
+
+                File archivoDestino = new File(carpetaDestino, fotoSeleccionada.getName());
+
+                Files.copy(fotoSeleccionada.toPath(), archivoDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                String rutaFoto = archivoDestino.getAbsolutePath();
+
+                //Esto es para empaquetar y guardar
+                Registro usuarioCreado = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutaFoto);
+
+                //Metodo agregar a la array
+                gestor.agregarArray(usuarioCreado);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al mover el archivo: " + ex.getMessage());
             }
         });
     }
