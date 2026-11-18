@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.DataOutput;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,7 +53,7 @@ public class CrearUsuario extends JFrame {
         setSize(800, 500);
 
         //Este es el menusito ese para seleccionar los tipos de documentos
-        ingresar_tipo_de_id.addItem(" ");
+        ingresar_tipo_de_id.addItem(" -- Seleccionar documento -- ");
         ingresar_tipo_de_id.addItem("Registro civil de nacimiento");
         ingresar_tipo_de_id.addItem("Cédula de ciudadanía");
         ingresar_tipo_de_id.addItem("Tarjeta de identidad");
@@ -106,7 +107,6 @@ public class CrearUsuario extends JFrame {
 
         //EL botonsito para subir la foto
         subir_foto.addActionListener(e -> {
-
             //Esto es eel filechooser
             JFileChooser fileChooser = new JFileChooser();
             FileNameExtensionFilter filtroTexto = new FileNameExtensionFilter("Archivos de imagen (*.png, jpg)", "jpg", "png");
@@ -137,37 +137,36 @@ public class CrearUsuario extends JFrame {
             String contraseñacap = ingresar_contraseña.getText().trim();
             String correocap = ingresar_email.getText().trim();
             String telefonocap = ingresar_telefono.getText().trim();
-
-            //Acá atrapamos la foto y la ubicamos
-            File fotoCapturada = fotoSeleccionada;
+            String rutafotocap = "";
 
             try {
-                //Esto es para obtener la foto
+                // 1. CREAR LA CARPETA LOCALMENTE (Evita cualquier conflicto global)
                 File carpetaDestino = new File("Fotos");
-
                 if (!carpetaDestino.exists()) {
                     carpetaDestino.mkdir();
                 }
 
-                if (!carpetaDestino.isDirectory()) {
-                    throw new IOException("La ruta de destino no es un directorio válido.");
-                }
-
+                // 2. CREAR EL DESTINO USANDO LA CARPETA Y EL NOMBRE DE LA FOTO SELECCIONADA
                 File archivoDestino = new File(carpetaDestino, fotoSeleccionada.getName());
 
+                // 3. MOVER / COPIAR EL ARCHIVO FÍSICAMENTE
                 Files.copy(fotoSeleccionada.toPath(), archivoDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
+                // Obtener la ruta absoluta lista para guardar
                 String rutaFoto = archivoDestino.getAbsolutePath();
 
-                //Esto es para empaquetar y guardar
-                Registro usuarioCreado = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutaFoto);
-
-                //Metodo agregar a la array
-                gestor.agregarArray(usuarioCreado);
+                rutafotocap = rutaFoto;
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al mover el archivo: " + ex.getMessage());
             }
+
+            Registro paquete = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap);
+            gestor.agregarArray(paquete);
+
+            JOptionPane.showMessageDialog(this, "¡Usuario registrado con éxito!");
+
+            System.out.println("Esto tiene el array " + gestor.getListadeusuarios().size());
         });
     }
 

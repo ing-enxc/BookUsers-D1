@@ -13,7 +13,6 @@ public class Registro extends Usuario {
     private String rutafoto;
 
     // 2. El constructor: sirve para inicializar los datos al crear un nuevo objeto
-
     public Registro(String tipodid, String ndid, String pnombre, String snombre, String papellido, String sapellido, String contraseña, String telefono, String correo, String rutafoto) {
         this.tipodid = tipodid;
         this.ndid = ndid;
@@ -27,9 +26,7 @@ public class Registro extends Usuario {
         this.rutafoto = rutafoto;
     }
 
-
     // 3. Los Getters: permiten "leer" o "sacar" los datos desde otra clase
-
     public String getTipodid() {
         return tipodid;
     }
