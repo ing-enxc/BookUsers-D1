@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import static Menu.Registro.generarUsername;
+
 public class CrearUsuario extends JFrame {
 
     //Las variables de la clase JFrame
@@ -154,6 +156,8 @@ public class CrearUsuario extends JFrame {
             String correocap = ingresar_email.getText().trim();
             String telefonocap = ingresar_telefono.getText().trim();
             String rutafotocap = "";
+            String idGenerado = gestor.generarSiguienteId();
+            String usernameGenerado = generarUsername(pnombrecap, papellidocap, sapellidocap);
 
             try {
                 // 1. CREAR LA CARPETA LOCALMENTE (Evita cualquier conflicto global)
@@ -178,13 +182,12 @@ public class CrearUsuario extends JFrame {
             }
 
             //Instanciamos la clase que empaqueta los atributos
-            Registro paquete = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap);
+            Registro paquete = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap, usernameGenerado, idGenerado);
 
             //Acá agregamos las atributos al array
             gestor.agregarArray(paquete);
 
             JOptionPane.showMessageDialog(this, "¡Usuario registrado con éxito!");
-
         });
     }
 
