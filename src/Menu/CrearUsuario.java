@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.DataOutput;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -105,6 +105,10 @@ public class CrearUsuario extends JFrame {
         ingresar_telefono.getDocument().addDocumentListener(validadorCampos);
         ingresar_email.getDocument().addDocumentListener(validadorCampos);
 
+        //Arreglamos el label para el icon
+        icon.setPreferredSize(new Dimension(90, 90));
+        icon.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
         //EL botonsito para subir la foto
         subir_foto.addActionListener(e -> {
             //Esto es eel filechooser
@@ -118,6 +122,18 @@ public class CrearUsuario extends JFrame {
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
                 fotoSeleccionada = fileChooser.getSelectedFile();
+
+                //Acá mostramos el icon
+                ImageIcon iconoOriginal = new ImageIcon(fotoSeleccionada.getAbsolutePath());
+
+                // 2. Redimensionar la imagen para que encaje en el JLabel (ej: 280x280)
+                Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+
+                // 3. Asignar la imagen redimensionada al JLabel y quitar el texto
+                icon.setIcon(new ImageIcon(imagenEscalada));
+                icon.setText("");
+
+
                 //Acá validamos que se haya adjuntdo la foto
                 validar.run();
             }
@@ -161,12 +177,14 @@ public class CrearUsuario extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error al mover el archivo: " + ex.getMessage());
             }
 
+            //Instanciamos la clase que empaqueta los atributos
             Registro paquete = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap);
+
+            //Acá agregamos las atributos al array
             gestor.agregarArray(paquete);
 
             JOptionPane.showMessageDialog(this, "¡Usuario registrado con éxito!");
 
-            System.out.println("Esto tiene el array " + gestor.getListadeusuarios().size());
         });
     }
 
