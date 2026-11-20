@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
+    //Atributos que del objeto usuario que van en el array
     private String tipodid;
     private String ndid;
     private String pnombre;
@@ -16,9 +17,11 @@ public class Usuario implements Serializable {
     private String rutafoto;
     private String username;
     private String id;
+
+    //Esto es para que los objetos y el array se puedan guardar en bytes y no se limpie el array al
     private static final long serialVersionUID = 1L;
 
-    // 2. El constructor: sirve para inicializar los datos al crear un nuevo objeto
+    // El constructor, donde se pasarán los datos para guardarlo en el array
     public Usuario(String tipodid, String ndid, String pnombre, String snombre, String papellido, String sapellido, String contraseña, String telefono, String correo, String rutafoto, String username, String id) {
         this.tipodid = tipodid;
         this.ndid = ndid;
@@ -55,97 +58,60 @@ public class Usuario implements Serializable {
         return tipodid;
     }
 
-    public void setTipodid(String tipodid) {
-        this.tipodid = tipodid;
-    }
-
     public String getNdid() {
         return ndid;
-    }
-
-    public void setNdid(String ndid) {
-        this.ndid = ndid;
     }
 
     public String getPnombre() {
         return pnombre;
     }
 
-    public void setPnombre(String pnombre) {
-        this.pnombre = pnombre;
-    }
-
     public String getSnombre() {
         return snombre;
-    }
-
-    public void setSnombre(String snombre) {
-        this.snombre = snombre;
     }
 
     public String getPapellido() {
         return papellido;
     }
 
-    public void setPapellido(String papellido) {
-        this.papellido = papellido;
-    }
-
     public String getSapellido() {
         return sapellido;
-    }
-
-    public void setSapellido(String sapellido) {
-        this.sapellido = sapellido;
     }
 
     public String getContraseña() {
         return contraseña;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
     public String getTelefono() {
         return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
     }
 
     public String getCorreo() {
         return correo;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     public String getRutafoto() {
         return rutafoto;
     }
 
-    public void setRutafoto(String rutafoto) {
-        this.rutafoto = rutafoto;
-    }
-
+    //Metodo para generar el username
     public static String generarUsername(String pnombre, String papellido, String sapellido) {
+        //Guardamos cada dato necesario para construir el username en minúsucla
         String pNombre = pnombre.trim().toLowerCase();
         String pApellido = papellido.trim().toLowerCase();
         String sApellido = sapellido.trim().toLowerCase();
 
-        // Tomamos la primera letra de cada apellido (si existe)
+        //Tomamos la inicial del primer apellido y segundo apellido
         String inicial1 = pApellido.isEmpty() ? "" : String.valueOf(pApellido.charAt(0));
         String inicial2 = sApellido.isEmpty() ? "" : String.valueOf(sApellido.charAt(0));
 
+        //Acá devuelve cómo se construye: inicial primer apellido, inicial segundo nombre y el primer nombre
         return inicial1 + inicial2 + pNombre;
     }
 
-    //Esto es el formato cómo se muestra en el JList
+    //Acá se establece el formato cómo se verá la info de los usuarios registrados en el JList
     @Override
     public String toString() {
-        return id + " - " + username + " - " + pnombre + " - " + snombre + " - " + papellido + " - " + sapellido + " - " + telefono + " - " + correo;
+        return id + " - " + username;
     }
 }

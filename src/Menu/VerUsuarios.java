@@ -20,19 +20,17 @@ public class VerUsuarios extends JFrame {
 
         setTitle("Ver usuarios");
         setContentPane(panel_vu);
-        setSize(800, 500);
+        setSize(400, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         cargarLista();
 
         if (boton_eliminarusuario != null) {
-            boton_eliminarusuario.setText("Eliminar usuario");
             boton_eliminarusuario.addActionListener(e -> eliminarUsuarioSeleccionado());
         }
 
         if (boton_pdf != null) {
-            boton_pdf.setText("Generar Ficha PDF");
             boton_pdf.addActionListener(e -> {
                 Usuario seleccionado = lista.getSelectedValue();
                 GeneradorPDF.exportarFichaUsuario(seleccionado, this);
@@ -40,7 +38,6 @@ public class VerUsuarios extends JFrame {
         }
 
         if (boton_editarusuario != null) {
-            boton_editarusuario.setText("Editar usuario");
             boton_editarusuario.addActionListener(e -> editarUsuarioSeleccionado());
         }
     }

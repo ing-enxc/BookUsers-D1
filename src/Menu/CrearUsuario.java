@@ -38,7 +38,6 @@ public class CrearUsuario extends JFrame {
     private JComboBox ingresar_tipo_de_id;
     private JButton subir_foto;
     private JButton boton_d_registrar;
-    private JButton limpiarButton;
     private JLabel icon;
 
     // Atributo en CrearUsuario:
@@ -111,7 +110,7 @@ public class CrearUsuario extends JFrame {
         setTitle("Ventana Principal");
         setContentPane(panel_r);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 500);
+        setSize(600, 500);
 
         //Este es el menusito ese para seleccionar los tipos de documentos
         ingresar_tipo_de_id.addItem(" -- Seleccionar documento -- ");

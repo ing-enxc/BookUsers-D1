@@ -3,10 +3,10 @@
   <grid id="27dc6" binding="panel_vu" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="383"/>
+      <xy x="20" y="20" width="302" height="383"/>
     </constraints>
     <properties>
-      <background color="-1"/>
+      <background color="-5776129"/>
     </properties>
     <border type="none"/>
     <children>
@@ -29,46 +29,48 @@
           </grid>
         </constraints>
         <properties>
-          <background color="-9398612"/>
+          <background color="-4988673"/>
           <font name="Hack" size="20" style="0"/>
           <foreground color="-16777216"/>
           <selectionBackground color="-11044158"/>
         </properties>
       </component>
-      <component id="1786d" class="javax.swing.JButton" binding="boton_eliminarusuario">
+      <component id="79d1e" class="javax.swing.JButton" binding="boton_editarusuario">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-15978346"/>
-          <font name="Hack" size="24" style="1"/>
+          <background color="-11044158"/>
+          <enabled value="true"/>
+          <font name="Hack" size="22" style="1"/>
           <foreground color="-1"/>
+          <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
-          <text value="Eliminar usuario"/>
+          <text value="  Editar usuario  "/>
         </properties>
       </component>
-      <component id="4e6de" class="javax.swing.JButton" binding="boton_pdf">
+      <component id="1786d" class="javax.swing.JButton" binding="boton_eliminarusuario">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-15978346"/>
-          <font name="Hack" size="24" style="1"/>
+          <background color="-11044158"/>
+          <font name="Hack" size="22" style="1"/>
           <foreground color="-1"/>
           <horizontalTextPosition value="0"/>
-          <text value="Generar PDF"/>
+          <text value=" Eliminar usuario "/>
         </properties>
       </component>
-      <component id="79d1e" class="javax.swing.JButton" binding="boton_editarusuario">
+      <component id="4e6de" class="javax.swing.JButton" binding="boton_pdf">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-15978346"/>
-          <enabled value="true"/>
-          <font name="Hack" size="24" style="1"/>
+          <background color="-11044158"/>
+          <font name="Hack" size="22" style="1"/>
           <foreground color="-1"/>
-          <text value="Editar usuario"/>
+          <horizontalTextPosition value="0"/>
+          <text value="   Generar pdf    "/>
         </properties>
       </component>
     </children>
