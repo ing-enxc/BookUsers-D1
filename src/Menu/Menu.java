@@ -16,7 +16,7 @@ public class Menu extends JFrame {
     //Metodo para crear la ventana
     public Menu() {
         //Ajustes necesarios
-        setTitle("Ventana Principal");
+        setTitle("BookUsers - Ariadna Niño y Enoc Correa");
         setContentPane(panel_p);
         setSize(700, 380);
         setLocationRelativeTo(null);
