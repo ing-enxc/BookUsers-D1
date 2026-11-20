@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
-import static Menu.Registro.generarUsername;
+import java.util.ArrayList;
+import static Menu.Usuario.generarUsername;
 
 public class CrearUsuario extends JFrame {
 
@@ -41,17 +41,76 @@ public class CrearUsuario extends JFrame {
     private JButton limpiarButton;
     private JLabel icon;
 
+    // Atributo en CrearUsuario:
+    private Usuario usuarioEnEdicion = null;
+    private Runnable callbackAlGuardar = null;
+
+    public void cargarParaEditar(Usuario u, Runnable alGuardar) {
+        this.usuarioEnEdicion = u;
+        this.callbackAlGuardar = alGuardar;
+
+        setTitle("Editar Usuario - " + u.getId());
+        boton_d_registrar.setText("Guardar Cambios");
+
+        ingresar_tipo_de_id.setSelectedItem(u.getTipodid());
+        ingresar_num_de_id.setText(u.getNdid());
+        ingresar_primer_nomb.setText(u.getPnombre());
+        ingresar_segund_nomb.setText(u.getSnombre());
+        ingresar_primer_apell.setText(u.getPapellido());
+        ingresar_segund_apell.setText(u.getSapellido());
+        ingresar_contraseña.setText(u.getContraseña());
+        ingresar_telefono.setText(u.getTelefono());
+        ingresar_email.setText(u.getCorreo());
+
+        if (u.getRutafoto() != null && !u.getRutafoto().isEmpty()) {
+            File archivoFoto = new File(u.getRutafoto());
+            if (archivoFoto.exists()) {
+                fotoSeleccionada = archivoFoto;
+                ImageIcon iconoOriginal = new ImageIcon(archivoFoto.getAbsolutePath());
+                Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+                icon.setIcon(new ImageIcon(imagenEscalada));
+                icon.setText("");
+            }
+        }
+
+        boton_d_registrar.setEnabled(true);
+    }
+
+    //Contador
+    private int contador = 1;
+
+    //Metodo del id
+    public String generarSiguienteId() {
+        String idFormateado = String.format("%04d", contador);
+        contador++;
+        return idFormateado;
+    }
+
+    //Array
+    private ArrayList<Usuario> listaCrearusuario = new ArrayList<>();
+
+    public ArrayList<Usuario> getArray() {
+        return listaCrearusuario;
+    }
+
+    public void agregarArray(Usuario usuario){
+        listaCrearusuario.add(usuario);
+    }
+
     //Variable para validar si se subió una foto
     private File fotoSeleccionada = null;
 
     //Metodo constructor
-    public CrearUsuario() {
+    public CrearUsuario(ArrayList<Usuario> listaUsuarios) {
+
+        this.listaCrearusuario = (listaUsuarios != null) ? listaUsuarios : new ArrayList<>();
+        this.contador = this.listaCrearusuario.size() + 1;
 
         //Unos ajustes de la ventana
         setLocationRelativeTo(null);
         setTitle("Ventana Principal");
         setContentPane(panel_r);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 500);
 
         //Este es el menusito ese para seleccionar los tipos de documentos
@@ -96,9 +155,7 @@ public class CrearUsuario extends JFrame {
         };
 
         //Aplicando el documentlistener a los textfields
-        ingresar_tipo_de_id.addActionListener(e -> {
-            validar.run();
-        });
+        ingresar_tipo_de_id.addActionListener(e -> validar.run());
         ingresar_num_de_id.getDocument().addDocumentListener(validadorCampos);
         ingresar_primer_nomb.getDocument().addDocumentListener(validadorCampos);
         ingresar_primer_apell.getDocument().addDocumentListener(validadorCampos);
@@ -135,19 +192,15 @@ public class CrearUsuario extends JFrame {
                 icon.setIcon(new ImageIcon(imagenEscalada));
                 icon.setText("");
 
-
                 //Acá validamos que se haya adjuntdo la foto
                 validar.run();
             }
         });
 
-        //Instanciamos la clase
-        Usuario gestor = new Usuario();
-
         //Esto es para que al presionar el boton de registrar se guarden los datos en la array
         boton_d_registrar.addActionListener( e -> {
             String tipodeidcap = String.valueOf(ingresar_tipo_de_id.getSelectedItem());
-            String ndidcap = ingresar_primer_nomb.getText().trim();
+            String ndidcap = ingresar_num_de_id.getText().trim();
             String pnombrecap = ingresar_primer_nomb.getText().trim();
             String snombrecap = ingresar_segund_nomb.getText().trim();
             String papellidocap = ingresar_primer_apell.getText().trim();
@@ -156,8 +209,8 @@ public class CrearUsuario extends JFrame {
             String correocap = ingresar_email.getText().trim();
             String telefonocap = ingresar_telefono.getText().trim();
             String rutafotocap = "";
-            String idGenerado = gestor.generarSiguienteId();
-            String usernameGenerado = generarUsername(pnombrecap, papellidocap, sapellidocap);
+            String usernamecap = generarUsername(pnombrecap, papellidocap, sapellidocap);
+            String idcap = generarSiguienteId();
 
             try {
                 // 1. CREAR LA CARPETA LOCALMENTE (Evita cualquier conflicto global)
@@ -181,17 +234,14 @@ public class CrearUsuario extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error al mover el archivo: " + ex.getMessage());
             }
 
-            //Instanciamos la clase que empaqueta los atributos
-            Registro paquete = new Registro(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap, usernameGenerado, idGenerado);
 
-            //Acá agregamos las atributos al array
-            gestor.agregarArray(paquete);
+            Usuario usuario = new Usuario(tipodeidcap, ndidcap, pnombrecap, snombrecap, papellidocap, sapellidocap, contraseñacap, telefonocap, correocap, rutafotocap, usernamecap, idcap);
+            agregarArray(usuario);
+            PersistenciaUsuarios.guardar(listaCrearusuario);
+
+            System.out.println("Array: " + getArray());
 
             JOptionPane.showMessageDialog(this, "¡Usuario registrado con éxito!");
         });
-    }
-
-    public static void main(String[] args) {
-        new CrearUsuario().setVisible(true);
     }
 }
