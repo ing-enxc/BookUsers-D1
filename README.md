@@ -13,4 +13,3 @@ Programación Orientada a Objetos · Ingeniería Informática · Escuela de Cien
 1. Clonar el repositorio de mi rama (CorreaEnoc).
 2. Abrir el programa en IntelliJ con JDK 21.
 3. En la clase Menu ejecutar el main.
-
