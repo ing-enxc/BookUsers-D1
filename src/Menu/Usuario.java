@@ -50,10 +50,6 @@ public class Usuario implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTipodid() {
         return tipodid;
     }

@@ -34,6 +34,11 @@ public class Menu extends JFrame {
             VerUsuarios ventanaVer = new VerUsuarios(listaUsuarios);
             ventanaVer.setVisible(true);
         });
+
+        tercer_boton.addActionListener( e -> {
+            Creditos ventanaCreditos = new Creditos();
+            ventanaCreditos.setVisible(true);
+        });
     }
 
     //Main que crea la ventana
